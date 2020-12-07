@@ -2,7 +2,7 @@
   "compilerOptions": {
     "typeRoots": ["./node_modules/@types", "./@types"],
     "outDir": "./dist",
-    "module": "commonjs",
+    "module": "AMD",
     "moduleResolution": "node",
     "incremental": true,
     "target": "es2018",
