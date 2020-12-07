@@ -22,7 +22,7 @@ export declare class LCE {
     bandwidthFetch(url: string): Promise<Response | null>;
     latencyFetch(url: string): Promise<Response | null>;
     abortableFetch(url: string, signal: any): Promise<Response | null>;
-    compare(a: any, b: any): 1 | -1 | 0;
+    compare(a: any, b: any): 0 | 1 | -1;
     terminate(): void;
     static calcBandwidth(downloadSize: number, latency: number): BandwithPerSecond;
 }
