@@ -34,58 +34,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { CCT } from "../app/CCT";
-import { Util } from "../app/Util";
-var TestAll = /** @class */ (function () {
-    function TestAll() {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    TestAll.prototype.start = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var cct, dcs_1, dcs, dcs_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        cct = new CCT({
-                            regions: ["Galaxy", "europe-west3", "europe-west4", "europe-west2"],
-                        });
-                        return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
-                    case 1:
-                        _a.sent();
-                        cct.startLatencyChecks(19);
-                        _a.label = 2;
-                    case 2:
-                        if (!!cct.finishedLatency) return [3 /*break*/, 4];
-                        dcs_1 = cct.getCurrentDatacentersSorted();
-                        console.log(dcs_1[0].name + "[" + dcs_1[0].averageLatency + "] " + dcs_1[1].name + "[" + dcs_1[1].averageLatency + "] " + dcs_1[2].name + "[" + dcs_1[2].averageLatency + "]");
-                        return [4 /*yield*/, Util.sleep(100)];
-                    case 3:
-                        _a.sent();
-                        return [3 /*break*/, 2];
-                    case 4:
-                        dcs = cct.getCurrentDatacentersSorted();
-                        console.log("Best Datacenter: " + dcs[0].name + " --> Average Latency: " + dcs[0].averageLatency);
-                        cct.startBandwidthChecks(dcs[0], 4);
-                        _a.label = 5;
-                    case 5:
-                        if (!!cct.finishedBandwidth) return [3 /*break*/, 7];
-                        dcs_2 = cct.getCurrentDatacentersSorted();
-                        console.log(dcs_2[0].name + "[" + dcs_2[0].averageBandwidth.megaBitsPerSecond + "]");
-                        return [4 /*yield*/, Util.sleep(50)];
-                    case 6:
-                        _a.sent();
-                        return [3 /*break*/, 5];
-                    case 7:
-                        dcs = cct.getCurrentDatacentersSorted();
-                        console.log("Best Datacenter: " + dcs[0].name + " --> Average Latency [ms]: " + dcs[0].averageLatency.toFixed(2) + " --> Average Bandwidth [Mbit/s]: " + dcs[0].averageBandwidth.megaBitsPerSecond.toFixed(2));
-                        console.log("All Latencies: " + dcs[0].latencies);
-                        console.log("All Bandwidths: " + JSON.stringify(dcs[0].bandwidths, null, 2));
-                        cct.clean();
-                        return [2 /*return*/];
-                }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "../app/CCT", "../app/Util"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var CCT_1 = require("../app/CCT");
+    var Util_1 = require("../app/Util");
+    var TestAll = /** @class */ (function () {
+        function TestAll() {
+        }
+        TestAll.prototype.start = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var cct, dcs_1, dcs, dcs_2;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            cct = new CCT_1.CCT({
+                                regions: ["Galaxy", "europe-west3", "europe-west4", "europe-west2"],
+                            });
+                            return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
+                        case 1:
+                            _a.sent();
+                            cct.startLatencyChecks(19);
+                            _a.label = 2;
+                        case 2:
+                            if (!!cct.finishedLatency) return [3 /*break*/, 4];
+                            dcs_1 = cct.getCurrentDatacentersSorted();
+                            console.log(dcs_1[0].name + "[" + dcs_1[0].averageLatency + "] " + dcs_1[1].name + "[" + dcs_1[1].averageLatency + "] " + dcs_1[2].name + "[" + dcs_1[2].averageLatency + "]");
+                            return [4 /*yield*/, Util_1.Util.sleep(100)];
+                        case 3:
+                            _a.sent();
+                            return [3 /*break*/, 2];
+                        case 4:
+                            dcs = cct.getCurrentDatacentersSorted();
+                            console.log("Best Datacenter: " + dcs[0].name + " --> Average Latency: " + dcs[0].averageLatency);
+                            cct.startBandwidthChecks(dcs[0], 4);
+                            _a.label = 5;
+                        case 5:
+                            if (!!cct.finishedBandwidth) return [3 /*break*/, 7];
+                            dcs_2 = cct.getCurrentDatacentersSorted();
+                            console.log(dcs_2[0].name + "[" + dcs_2[0].averageBandwidth.megaBitsPerSecond + "]");
+                            return [4 /*yield*/, Util_1.Util.sleep(50)];
+                        case 6:
+                            _a.sent();
+                            return [3 /*break*/, 5];
+                        case 7:
+                            dcs = cct.getCurrentDatacentersSorted();
+                            console.log("Best Datacenter: " + dcs[0].name + " --> Average Latency [ms]: " + dcs[0].averageLatency.toFixed(2) + " --> Average Bandwidth [Mbit/s]: " + dcs[0].averageBandwidth.megaBitsPerSecond.toFixed(2));
+                            console.log("All Latencies: " + dcs[0].latencies);
+                            console.log("All Bandwidths: " + JSON.stringify(dcs[0].bandwidths, null, 2));
+                            cct.clean();
+                            return [2 /*return*/];
+                    }
+                });
             });
-        });
-    };
-    return TestAll;
-}());
-var t = new TestAll();
-t.start();
+        };
+        return TestAll;
+    }());
+    var t = new TestAll();
+    t.start();
+});

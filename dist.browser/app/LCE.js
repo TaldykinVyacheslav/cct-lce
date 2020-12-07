@@ -34,220 +34,233 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import fetch from "node-fetch";
-import { AbortController } from "abort-controller";
-var LCE = /** @class */ (function () {
-    function LCE(_a) {
-        var datacenters = _a.datacenters, agent = _a.agent;
-        this.datacenters = datacenters;
-        this.agent = agent;
-        this.cancelableLatencyRequests = [];
-        this.cancelableBandwidthRequests = [];
-        this.terminateAllCalls = false;
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    LCE.prototype.runLatencyCheckForAll = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var results, pResults, data, filteredData;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        results = [];
-                        this.datacenters.forEach(function (datacenter) {
-                            results.push(_this.getLatencyFor(datacenter));
-                        });
-                        return [4 /*yield*/, results];
-                    case 1:
-                        pResults = _a.sent();
-                        return [4 /*yield*/, Promise.all(pResults)];
-                    case 2:
-                        data = _a.sent();
-                        filteredData = data.filter(function (d) { return d !== null; });
-                        filteredData.sort(this.compare);
-                        this.cancelableLatencyRequests = [];
-                        return [2 /*return*/, filteredData];
-                }
-            });
-        });
-    };
-    LCE.prototype.runBandwidthCheckForAll = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var results, _i, _a, datacenter, bandwidth, filteredData, err_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 5, , 6]);
-                        results = [];
-                        _i = 0, _a = this.datacenters;
-                        _b.label = 1;
-                    case 1:
-                        if (!(_i < _a.length)) return [3 /*break*/, 4];
-                        datacenter = _a[_i];
-                        if (this.terminateAllCalls) {
-                            return [3 /*break*/, 4];
-                        }
-                        return [4 /*yield*/, this.getBandwidthFor(datacenter)];
-                    case 2:
-                        bandwidth = _b.sent();
-                        results.push(bandwidth);
-                        _b.label = 3;
-                    case 3:
-                        _i++;
-                        return [3 /*break*/, 1];
-                    case 4:
-                        filteredData = results.filter(function (d) { return d !== null; });
-                        filteredData.sort(this.compare);
-                        this.cancelableBandwidthRequests = [];
-                        return [2 /*return*/, filteredData];
-                    case 5:
-                        err_1 = _b.sent();
-                        return [2 /*return*/, null];
-                    case 6: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    LCE.prototype.getBandwidthForId = function (id) {
-        var dc = this.datacenters.find(function (datacenter) { return datacenter.id === id; });
-        if (!dc) {
-            return null;
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "node-fetch", "abort-controller"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.LCE = void 0;
+    var node_fetch_1 = require("node-fetch");
+    var abort_controller_1 = require("abort-controller");
+    var LCE = /** @class */ (function () {
+        function LCE(_a) {
+            var datacenters = _a.datacenters, agent = _a.agent;
+            this.datacenters = datacenters;
+            this.agent = agent;
+            this.cancelableLatencyRequests = [];
+            this.cancelableBandwidthRequests = [];
+            this.terminateAllCalls = false;
         }
-        return this.getBandwidthFor(dc);
-    };
-    LCE.prototype.getLatencyForId = function (id) {
-        var dc = this.datacenters.find(function (datacenter) { return datacenter.id === id; });
-        if (!dc) {
-            return null;
-        }
-        return this.getLatencyFor(dc);
-    };
-    LCE.prototype.getLatencyFor = function (datacenter) {
-        return __awaiter(this, void 0, void 0, function () {
-            var start, end, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        start = Date.now();
-                        return [4 /*yield*/, this.latencyFetch("https://" + datacenter.ip + "/drone/index.html")];
-                    case 1:
-                        _a.sent();
-                        end = Date.now();
-                        return [2 /*return*/, {
-                                id: datacenter.id,
-                                latency: end - start,
-                                cloud: datacenter.cloud,
-                                name: datacenter.name,
-                                town: datacenter.town,
-                                country: datacenter.country,
-                                latitude: datacenter.latitude,
-                                longitude: datacenter.longitude,
-                                ip: datacenter.ip,
-                                timestamp: Date.now(),
-                            }];
-                    case 2:
-                        error_1 = _a.sent();
-                        return [2 /*return*/, null];
-                    case 3: return [2 /*return*/];
-                }
+        LCE.prototype.runLatencyCheckForAll = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var results, pResults, data, filteredData;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            results = [];
+                            this.datacenters.forEach(function (datacenter) {
+                                results.push(_this.getLatencyFor(datacenter));
+                            });
+                            return [4 /*yield*/, results];
+                        case 1:
+                            pResults = _a.sent();
+                            return [4 /*yield*/, Promise.all(pResults)];
+                        case 2:
+                            data = _a.sent();
+                            filteredData = data.filter(function (d) { return d !== null; });
+                            filteredData.sort(this.compare);
+                            this.cancelableLatencyRequests = [];
+                            return [2 /*return*/, filteredData];
+                    }
+                });
             });
-        });
-    };
-    LCE.prototype.getBandwidthFor = function (datacenter) {
-        return __awaiter(this, void 0, void 0, function () {
-            var start, response, end, rawBody, bandwidth;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        start = Date.now();
-                        return [4 /*yield*/, this.bandwidthFetch("https://" + datacenter.ip + "/drone/big")];
-                    case 1:
-                        response = _a.sent();
-                        if (!(response !== null)) return [3 /*break*/, 3];
-                        end = Date.now();
-                        return [4 /*yield*/, response.text()];
-                    case 2:
-                        rawBody = _a.sent();
-                        bandwidth = LCE.calcBandwidth(rawBody.length, end - start);
-                        return [2 /*return*/, {
-                                id: datacenter.id,
-                                bandwidth: bandwidth,
-                                cloud: datacenter.cloud,
-                                name: datacenter.name,
-                                town: datacenter.town,
-                                country: datacenter.country,
-                                latitude: datacenter.latitude,
-                                longitude: datacenter.longitude,
-                                ip: datacenter.ip,
-                            }];
-                    case 3: return [2 /*return*/, null];
-                }
-            });
-        });
-    };
-    LCE.prototype.bandwidthFetch = function (url) {
-        var controller = new AbortController();
-        var signal = controller.signal;
-        this.cancelableBandwidthRequests.push(controller);
-        return this.abortableFetch(url, signal);
-    };
-    LCE.prototype.latencyFetch = function (url) {
-        var controller = new AbortController();
-        var signal = controller.signal;
-        this.cancelableLatencyRequests.push(controller);
-        return this.abortableFetch(url, signal);
-    };
-    LCE.prototype.abortableFetch = function (url, signal) {
-        return __awaiter(this, void 0, void 0, function () {
-            var error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, fetch(url, {
-                                signal: signal,
-                            })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        error_2 = _a.sent();
-                        console.log(error_2);
-                        return [2 /*return*/, null];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    LCE.prototype.compare = function (a, b) {
-        if (a.latency < b.latency)
-            return -1;
-        if (a.latency > b.latency)
-            return 1;
-        return 0;
-    };
-    LCE.prototype.terminate = function () {
-        this.terminateAllCalls = true;
-        this.cancelableLatencyRequests.forEach(function (controller) {
-            controller.abort();
-        });
-        this.cancelableBandwidthRequests.forEach(function (controller) {
-            controller.abort();
-        });
-        this.cancelableLatencyRequests = [];
-        this.cancelableBandwidthRequests = [];
-        this.terminateAllCalls = false;
-    };
-    LCE.calcBandwidth = function (downloadSize, latency) {
-        var durationinSeconds = latency / 1000;
-        var bitsLoaded = downloadSize * 8;
-        var bitsPerSeconds = bitsLoaded / durationinSeconds;
-        var kiloBitsPerSeconds = bitsPerSeconds / 1000;
-        var megaBitsPerSeconds = kiloBitsPerSeconds / 1000;
-        return {
-            bitsPerSecond: bitsPerSeconds,
-            kiloBitsPerSecond: kiloBitsPerSeconds,
-            megaBitsPerSecond: megaBitsPerSeconds,
         };
-    };
-    return LCE;
-}());
-export { LCE };
+        LCE.prototype.runBandwidthCheckForAll = function () {
+            return __awaiter(this, void 0, void 0, function () {
+                var results, _i, _a, datacenter, bandwidth, filteredData, err_1;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            _b.trys.push([0, 5, , 6]);
+                            results = [];
+                            _i = 0, _a = this.datacenters;
+                            _b.label = 1;
+                        case 1:
+                            if (!(_i < _a.length)) return [3 /*break*/, 4];
+                            datacenter = _a[_i];
+                            if (this.terminateAllCalls) {
+                                return [3 /*break*/, 4];
+                            }
+                            return [4 /*yield*/, this.getBandwidthFor(datacenter)];
+                        case 2:
+                            bandwidth = _b.sent();
+                            results.push(bandwidth);
+                            _b.label = 3;
+                        case 3:
+                            _i++;
+                            return [3 /*break*/, 1];
+                        case 4:
+                            filteredData = results.filter(function (d) { return d !== null; });
+                            filteredData.sort(this.compare);
+                            this.cancelableBandwidthRequests = [];
+                            return [2 /*return*/, filteredData];
+                        case 5:
+                            err_1 = _b.sent();
+                            return [2 /*return*/, null];
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        LCE.prototype.getBandwidthForId = function (id) {
+            var dc = this.datacenters.find(function (datacenter) { return datacenter.id === id; });
+            if (!dc) {
+                return null;
+            }
+            return this.getBandwidthFor(dc);
+        };
+        LCE.prototype.getLatencyForId = function (id) {
+            var dc = this.datacenters.find(function (datacenter) { return datacenter.id === id; });
+            if (!dc) {
+                return null;
+            }
+            return this.getLatencyFor(dc);
+        };
+        LCE.prototype.getLatencyFor = function (datacenter) {
+            return __awaiter(this, void 0, void 0, function () {
+                var start, end, error_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            start = Date.now();
+                            return [4 /*yield*/, this.latencyFetch("https://" + datacenter.ip + "/drone/index.html")];
+                        case 1:
+                            _a.sent();
+                            end = Date.now();
+                            return [2 /*return*/, {
+                                    id: datacenter.id,
+                                    latency: end - start,
+                                    cloud: datacenter.cloud,
+                                    name: datacenter.name,
+                                    town: datacenter.town,
+                                    country: datacenter.country,
+                                    latitude: datacenter.latitude,
+                                    longitude: datacenter.longitude,
+                                    ip: datacenter.ip,
+                                    timestamp: Date.now(),
+                                }];
+                        case 2:
+                            error_1 = _a.sent();
+                            return [2 /*return*/, null];
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        LCE.prototype.getBandwidthFor = function (datacenter) {
+            return __awaiter(this, void 0, void 0, function () {
+                var start, response, end, rawBody, bandwidth;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            start = Date.now();
+                            return [4 /*yield*/, this.bandwidthFetch("https://" + datacenter.ip + "/drone/big")];
+                        case 1:
+                            response = _a.sent();
+                            if (!(response !== null)) return [3 /*break*/, 3];
+                            end = Date.now();
+                            return [4 /*yield*/, response.text()];
+                        case 2:
+                            rawBody = _a.sent();
+                            bandwidth = LCE.calcBandwidth(rawBody.length, end - start);
+                            return [2 /*return*/, {
+                                    id: datacenter.id,
+                                    bandwidth: bandwidth,
+                                    cloud: datacenter.cloud,
+                                    name: datacenter.name,
+                                    town: datacenter.town,
+                                    country: datacenter.country,
+                                    latitude: datacenter.latitude,
+                                    longitude: datacenter.longitude,
+                                    ip: datacenter.ip,
+                                }];
+                        case 3: return [2 /*return*/, null];
+                    }
+                });
+            });
+        };
+        LCE.prototype.bandwidthFetch = function (url) {
+            var controller = new abort_controller_1.AbortController();
+            var signal = controller.signal;
+            this.cancelableBandwidthRequests.push(controller);
+            return this.abortableFetch(url, signal);
+        };
+        LCE.prototype.latencyFetch = function (url) {
+            var controller = new abort_controller_1.AbortController();
+            var signal = controller.signal;
+            this.cancelableLatencyRequests.push(controller);
+            return this.abortableFetch(url, signal);
+        };
+        LCE.prototype.abortableFetch = function (url, signal) {
+            return __awaiter(this, void 0, void 0, function () {
+                var error_2;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, node_fetch_1.default(url, {
+                                    signal: signal,
+                                })];
+                        case 1: return [2 /*return*/, _a.sent()];
+                        case 2:
+                            error_2 = _a.sent();
+                            console.log(error_2);
+                            return [2 /*return*/, null];
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        LCE.prototype.compare = function (a, b) {
+            if (a.latency < b.latency)
+                return -1;
+            if (a.latency > b.latency)
+                return 1;
+            return 0;
+        };
+        LCE.prototype.terminate = function () {
+            this.terminateAllCalls = true;
+            this.cancelableLatencyRequests.forEach(function (controller) {
+                controller.abort();
+            });
+            this.cancelableBandwidthRequests.forEach(function (controller) {
+                controller.abort();
+            });
+            this.cancelableLatencyRequests = [];
+            this.cancelableBandwidthRequests = [];
+            this.terminateAllCalls = false;
+        };
+        LCE.calcBandwidth = function (downloadSize, latency) {
+            var durationinSeconds = latency / 1000;
+            var bitsLoaded = downloadSize * 8;
+            var bitsPerSeconds = bitsLoaded / durationinSeconds;
+            var kiloBitsPerSeconds = bitsPerSeconds / 1000;
+            var megaBitsPerSeconds = kiloBitsPerSeconds / 1000;
+            return {
+                bitsPerSecond: bitsPerSeconds,
+                kiloBitsPerSecond: kiloBitsPerSeconds,
+                megaBitsPerSecond: megaBitsPerSeconds,
+            };
+        };
+        return LCE;
+    }());
+    exports.LCE = LCE;
+});

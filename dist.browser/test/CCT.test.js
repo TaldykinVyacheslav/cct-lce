@@ -34,172 +34,184 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { CCT } from "../app/CCT";
-import { Util } from "../app/Util";
-import * as dotenv from "dotenv";
-dotenv.config();
-describe("CCT tests", function () {
-    test("test initialization", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cct;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    cct = new CCT({
-                        regions: ["Galaxy", "europe-west3"],
-                    });
-                    return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
-                case 1:
-                    _a.sent();
-                    expect(cct.datacenters.length).toEqual(2);
-                    expect(cct.datacenters[0].position).toEqual(0);
-                    expect(cct.datacenters[0].latencies.length).toEqual(0);
-                    expect(cct.datacenters[0].bandwidths.length).toEqual(0);
-                    expect(cct.datacenters[0].averageLatency).toEqual(0);
-                    expect(cct.datacenters[0].averageBandwidth).toEqual({
-                        bitsPerSecond: 0,
-                        kiloBitsPerSecond: 0,
-                        megaBitsPerSecond: 0,
-                    });
-                    expect(cct.datacenters[1].position).toEqual(0);
-                    expect(cct.datacenters[1].latencies.length).toEqual(0);
-                    expect(cct.datacenters[1].bandwidths.length).toEqual(0);
-                    expect(cct.datacenters[1].averageLatency).toEqual(0);
-                    expect(cct.datacenters[1].averageBandwidth).toEqual({
-                        bitsPerSecond: 0,
-                        kiloBitsPerSecond: 0,
-                        megaBitsPerSecond: 0,
-                    });
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    test("test cleanup", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cct;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    cct = new CCT({
-                        regions: ["Galaxy", "europe-west3"],
-                    });
-                    return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
-                case 1:
-                    _a.sent();
-                    cct.startLatencyChecks(1);
-                    _a.label = 2;
-                case 2:
-                    if (!!cct.finishedLatency) return [3 /*break*/, 4];
-                    return [4 /*yield*/, Util.sleep(50)];
-                case 3:
-                    _a.sent();
-                    return [3 /*break*/, 2];
-                case 4:
-                    cct.clean();
-                    expect(cct.datacenters[0].position).toEqual(0);
-                    expect(cct.datacenters[0].latencies.length).toEqual(0);
-                    expect(cct.datacenters[0].bandwidths.length).toEqual(0);
-                    expect(cct.datacenters[0].averageLatency).toEqual(0);
-                    expect(cct.datacenters[0].averageBandwidth).toEqual({
-                        bitsPerSecond: 0,
-                        kiloBitsPerSecond: 0,
-                        megaBitsPerSecond: 0,
-                    });
-                    expect(cct.datacenters[1].position).toEqual(0);
-                    expect(cct.datacenters[1].latencies.length).toEqual(0);
-                    expect(cct.datacenters[1].bandwidths.length).toEqual(0);
-                    expect(cct.datacenters[1].averageLatency).toEqual(0);
-                    expect(cct.datacenters[1].averageBandwidth).toEqual({
-                        bitsPerSecond: 0,
-                        kiloBitsPerSecond: 0,
-                        megaBitsPerSecond: 0,
-                    });
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    test("check latency", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cct;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    cct = new CCT({
-                        regions: ["Galaxy", "europe-west3"],
-                    });
-                    return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
-                case 1:
-                    _a.sent();
-                    expect(cct.datacenters.length).toEqual(2);
-                    cct.startLatencyChecks(3);
-                    _a.label = 2;
-                case 2:
-                    if (!!cct.finishedLatency) return [3 /*break*/, 4];
-                    return [4 /*yield*/, Util.sleep(50)];
-                case 3:
-                    _a.sent();
-                    return [3 /*break*/, 2];
-                case 4:
-                    expect(cct.finishedLatency).toBeTruthy();
-                    expect(cct.finishedBandwidth).toBeFalsy();
-                    expect(cct.datacenters[0].latencies.length).toEqual(3);
-                    expect(cct.datacenters[1].latencies.length).toEqual(3);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    test("check bandwidth", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cct;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    cct = new CCT({
-                        regions: ["Galaxy"],
-                    });
-                    return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
-                case 1:
-                    _a.sent();
-                    expect(cct.datacenters.length).toEqual(1);
-                    cct.startBandwidthChecks(cct.datacenters[0], 3);
-                    _a.label = 2;
-                case 2:
-                    if (!!cct.finishedBandwidth) return [3 /*break*/, 4];
-                    return [4 /*yield*/, Util.sleep(50)];
-                case 3:
-                    _a.sent();
-                    return [3 /*break*/, 2];
-                case 4:
-                    expect(cct.finishedLatency).toBeFalsy();
-                    expect(cct.finishedBandwidth).toBeTruthy();
-                    expect(cct.datacenters[0].bandwidths.length).toEqual(3);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
-    test("abort running measurement", function () { return __awaiter(void 0, void 0, void 0, function () {
-        var cct;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    cct = new CCT({
-                        regions: ["Galaxy"],
-                    });
-                    return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
-                case 1:
-                    _a.sent();
-                    expect(cct.datacenters.length).toEqual(1);
-                    cct.startBandwidthChecks(cct.datacenters[0], 3);
-                    _a.label = 2;
-                case 2:
-                    if (!!cct.finishedBandwidth) return [3 /*break*/, 4];
-                    return [4 /*yield*/, Util.sleep(50)];
-                case 3:
-                    _a.sent();
-                    cct.stopMeasurements();
-                    return [3 /*break*/, 2];
-                case 4:
-                    expect(cct.finishedLatency).toBeFalsy();
-                    expect(cct.finishedBandwidth).toBeTruthy();
-                    expect(cct.datacenters[0].bandwidths.length).not.toEqual(3);
-                    return [2 /*return*/];
-            }
-        });
-    }); });
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "../app/CCT", "../app/Util", "dotenv"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var CCT_1 = require("../app/CCT");
+    var Util_1 = require("../app/Util");
+    var dotenv = require("dotenv");
+    dotenv.config();
+    describe("CCT tests", function () {
+        test("test initialization", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var cct;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cct = new CCT_1.CCT({
+                            regions: ["Galaxy", "europe-west3"],
+                        });
+                        return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
+                    case 1:
+                        _a.sent();
+                        expect(cct.datacenters.length).toEqual(2);
+                        expect(cct.datacenters[0].position).toEqual(0);
+                        expect(cct.datacenters[0].latencies.length).toEqual(0);
+                        expect(cct.datacenters[0].bandwidths.length).toEqual(0);
+                        expect(cct.datacenters[0].averageLatency).toEqual(0);
+                        expect(cct.datacenters[0].averageBandwidth).toEqual({
+                            bitsPerSecond: 0,
+                            kiloBitsPerSecond: 0,
+                            megaBitsPerSecond: 0,
+                        });
+                        expect(cct.datacenters[1].position).toEqual(0);
+                        expect(cct.datacenters[1].latencies.length).toEqual(0);
+                        expect(cct.datacenters[1].bandwidths.length).toEqual(0);
+                        expect(cct.datacenters[1].averageLatency).toEqual(0);
+                        expect(cct.datacenters[1].averageBandwidth).toEqual({
+                            bitsPerSecond: 0,
+                            kiloBitsPerSecond: 0,
+                            megaBitsPerSecond: 0,
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        test("test cleanup", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var cct;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cct = new CCT_1.CCT({
+                            regions: ["Galaxy", "europe-west3"],
+                        });
+                        return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
+                    case 1:
+                        _a.sent();
+                        cct.startLatencyChecks(1);
+                        _a.label = 2;
+                    case 2:
+                        if (!!cct.finishedLatency) return [3 /*break*/, 4];
+                        return [4 /*yield*/, Util_1.Util.sleep(50)];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 2];
+                    case 4:
+                        cct.clean();
+                        expect(cct.datacenters[0].position).toEqual(0);
+                        expect(cct.datacenters[0].latencies.length).toEqual(0);
+                        expect(cct.datacenters[0].bandwidths.length).toEqual(0);
+                        expect(cct.datacenters[0].averageLatency).toEqual(0);
+                        expect(cct.datacenters[0].averageBandwidth).toEqual({
+                            bitsPerSecond: 0,
+                            kiloBitsPerSecond: 0,
+                            megaBitsPerSecond: 0,
+                        });
+                        expect(cct.datacenters[1].position).toEqual(0);
+                        expect(cct.datacenters[1].latencies.length).toEqual(0);
+                        expect(cct.datacenters[1].bandwidths.length).toEqual(0);
+                        expect(cct.datacenters[1].averageLatency).toEqual(0);
+                        expect(cct.datacenters[1].averageBandwidth).toEqual({
+                            bitsPerSecond: 0,
+                            kiloBitsPerSecond: 0,
+                            megaBitsPerSecond: 0,
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        test("check latency", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var cct;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cct = new CCT_1.CCT({
+                            regions: ["Galaxy", "europe-west3"],
+                        });
+                        return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
+                    case 1:
+                        _a.sent();
+                        expect(cct.datacenters.length).toEqual(2);
+                        cct.startLatencyChecks(3);
+                        _a.label = 2;
+                    case 2:
+                        if (!!cct.finishedLatency) return [3 /*break*/, 4];
+                        return [4 /*yield*/, Util_1.Util.sleep(50)];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 2];
+                    case 4:
+                        expect(cct.finishedLatency).toBeTruthy();
+                        expect(cct.finishedBandwidth).toBeFalsy();
+                        expect(cct.datacenters[0].latencies.length).toEqual(3);
+                        expect(cct.datacenters[1].latencies.length).toEqual(3);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        test("check bandwidth", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var cct;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cct = new CCT_1.CCT({
+                            regions: ["Galaxy"],
+                        });
+                        return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
+                    case 1:
+                        _a.sent();
+                        expect(cct.datacenters.length).toEqual(1);
+                        cct.startBandwidthChecks(cct.datacenters[0], 3);
+                        _a.label = 2;
+                    case 2:
+                        if (!!cct.finishedBandwidth) return [3 /*break*/, 4];
+                        return [4 /*yield*/, Util_1.Util.sleep(50)];
+                    case 3:
+                        _a.sent();
+                        return [3 /*break*/, 2];
+                    case 4:
+                        expect(cct.finishedLatency).toBeFalsy();
+                        expect(cct.finishedBandwidth).toBeTruthy();
+                        expect(cct.datacenters[0].bandwidths.length).toEqual(3);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+        test("abort running measurement", function () { return __awaiter(void 0, void 0, void 0, function () {
+            var cct;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        cct = new CCT_1.CCT({
+                            regions: ["Galaxy"],
+                        });
+                        return [4 /*yield*/, cct.fetchDatacenterInformation(process.env.CCT_DICTIONARY_URL)];
+                    case 1:
+                        _a.sent();
+                        expect(cct.datacenters.length).toEqual(1);
+                        cct.startBandwidthChecks(cct.datacenters[0], 3);
+                        _a.label = 2;
+                    case 2:
+                        if (!!cct.finishedBandwidth) return [3 /*break*/, 4];
+                        return [4 /*yield*/, Util_1.Util.sleep(50)];
+                    case 3:
+                        _a.sent();
+                        cct.stopMeasurements();
+                        return [3 /*break*/, 2];
+                    case 4:
+                        expect(cct.finishedLatency).toBeFalsy();
+                        expect(cct.finishedBandwidth).toBeTruthy();
+                        expect(cct.datacenters[0].bandwidths.length).not.toEqual(3);
+                        return [2 /*return*/];
+                }
+            });
+        }); });
+    });
 });

@@ -34,157 +34,170 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import fetch from "node-fetch";
-import { LCE } from "./LCE";
-import { Util } from "./Util";
-var CCT = /** @class */ (function () {
-    function CCT(_a) {
-        var regions = _a.regions;
-        this.finishedLatency = false;
-        this.finishedBandwidth = false;
-        this.regions = regions || [];
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    CCT.prototype.fetchDatacenterInformation = function (dictionaryUrl) {
-        return __awaiter(this, void 0, void 0, function () {
-            var dcs;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!dictionaryUrl) {
-                            throw new Error('Datacenter URL missing.');
-                        }
-                        return [4 /*yield*/, fetch(dictionaryUrl).then(function (res) {
-                                return res.json();
-                            })];
-                    case 1:
-                        dcs = _a.sent();
-                        this.datacenters = this.regions
-                            ? dcs.filter(function (dc) { return _this.mapDatacentersOnRegions(dc); })
-                            : dcs;
-                        this.clean();
-                        this.lce = new LCE({
-                            datacenters: this.datacenters,
-                        });
-                        return [2 /*return*/];
-                }
-            });
-        });
-    };
-    CCT.prototype.mapDatacentersOnRegions = function (dc) {
-        return this.regions
-            .map(function (region) { return dc.name.toLowerCase() === region.toLowerCase(); })
-            .reduce(function (a, b) { return a || b; });
-    };
-    CCT.prototype.stopMeasurements = function () {
-        this.lce.terminate();
-    };
-    CCT.prototype.startLatencyChecks = function (iterations) {
-        var _this = this;
-        this.startMeasurementForLatency(iterations).then(function () {
-            _this.finishedLatency = true;
-        });
-    };
-    CCT.prototype.startMeasurementForLatency = function (iterations) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function () {
-            var i, _loop_1, this_1, dcLength;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        i = 0;
-                        _b.label = 1;
-                    case 1:
-                        if (!(i < iterations)) return [3 /*break*/, 6];
-                        _loop_1 = function (dcLength) {
-                            var dc, result, index;
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0:
-                                        dc = this_1.datacenters[dcLength];
-                                        return [4 /*yield*/, this_1.lce.getLatencyForId(dc.id)];
-                                    case 1:
-                                        result = _a.sent();
-                                        if (result && result.latency) {
-                                            index = this_1.datacenters.findIndex(function (e) { return e.id === dc.id; });
-                                            (_a = this_1.datacenters[index].latencies) === null || _a === void 0 ? void 0 : _a.push(result.latency);
-                                            this_1.datacenters[index].averageLatency = Util.getAverageLatency(this_1.datacenters[index].latencies);
-                                        }
-                                        return [2 /*return*/];
-                                }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "node-fetch", "./LCE", "./Util"], factory);
+    }
+})(function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CCT = void 0;
+    var node_fetch_1 = require("node-fetch");
+    var LCE_1 = require("./LCE");
+    var Util_1 = require("./Util");
+    var CCT = /** @class */ (function () {
+        function CCT(_a) {
+            var regions = _a.regions;
+            this.finishedLatency = false;
+            this.finishedBandwidth = false;
+            this.regions = regions || [];
+        }
+        CCT.prototype.fetchDatacenterInformation = function (dictionaryUrl) {
+            return __awaiter(this, void 0, void 0, function () {
+                var dcs;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!dictionaryUrl) {
+                                throw new Error('Datacenter URL missing.');
+                            }
+                            return [4 /*yield*/, node_fetch_1.default(dictionaryUrl).then(function (res) {
+                                    return res.json();
+                                })];
+                        case 1:
+                            dcs = _a.sent();
+                            this.datacenters = this.regions
+                                ? dcs.filter(function (dc) { return _this.mapDatacentersOnRegions(dc); })
+                                : dcs;
+                            this.clean();
+                            this.lce = new LCE_1.LCE({
+                                datacenters: this.datacenters,
                             });
-                        };
-                        this_1 = this;
-                        dcLength = 0;
-                        _b.label = 2;
-                    case 2:
-                        if (!(dcLength < this.datacenters.length)) return [3 /*break*/, 5];
-                        return [5 /*yield**/, _loop_1(dcLength)];
-                    case 3:
-                        _b.sent();
-                        _b.label = 4;
-                    case 4:
-                        dcLength++;
-                        return [3 /*break*/, 2];
-                    case 5:
-                        i++;
-                        return [3 /*break*/, 1];
-                    case 6: return [2 /*return*/];
-                }
+                            return [2 /*return*/];
+                    }
+                });
             });
-        });
-    };
-    CCT.prototype.startBandwidthChecks = function (datacenter, iterations) {
-        var _this = this;
-        this.startMeasurementForBandwidth(datacenter, iterations).then(function () {
-            _this.finishedBandwidth = true;
-        });
-    };
-    CCT.prototype.startMeasurementForBandwidth = function (dc, iterations) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function () {
-            var i, result, index;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        i = 0;
-                        _b.label = 1;
-                    case 1:
-                        if (!(i < iterations)) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.lce.getBandwidthForId(dc.id)];
-                    case 2:
-                        result = _b.sent();
-                        if (result && result.bandwidth) {
-                            index = this.datacenters.findIndex(function (e) { return e.id === dc.id; });
-                            (_a = this.datacenters[index].bandwidths) === null || _a === void 0 ? void 0 : _a.push(result.bandwidth);
-                            this.datacenters[index].averageBandwidth = Util.getAverageBandwidth(this.datacenters[index].bandwidths);
-                        }
-                        _b.label = 3;
-                    case 3:
-                        i++;
-                        return [3 /*break*/, 1];
-                    case 4: return [2 /*return*/];
-                }
+        };
+        CCT.prototype.mapDatacentersOnRegions = function (dc) {
+            return this.regions
+                .map(function (region) { return dc.name.toLowerCase() === region.toLowerCase(); })
+                .reduce(function (a, b) { return a || b; });
+        };
+        CCT.prototype.stopMeasurements = function () {
+            this.lce.terminate();
+        };
+        CCT.prototype.startLatencyChecks = function (iterations) {
+            var _this = this;
+            this.startMeasurementForLatency(iterations).then(function () {
+                _this.finishedLatency = true;
             });
-        });
-    };
-    CCT.prototype.getCurrentDatacentersSorted = function () {
-        Util.sortDatacenters(this.datacenters);
-        return this.datacenters;
-    };
-    CCT.prototype.clean = function () {
-        this.datacenters.forEach(function (dc) {
-            dc.position = 0;
-            dc.averageLatency = 0;
-            dc.averageBandwidth = {
-                bitsPerSecond: 0,
-                kiloBitsPerSecond: 0,
-                megaBitsPerSecond: 0,
-            };
-            dc.latencies = [];
-            dc.bandwidths = [];
-        });
-    };
-    return CCT;
-}());
-export { CCT };
+        };
+        CCT.prototype.startMeasurementForLatency = function (iterations) {
+            var _a;
+            return __awaiter(this, void 0, void 0, function () {
+                var i, _loop_1, this_1, dcLength;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            i = 0;
+                            _b.label = 1;
+                        case 1:
+                            if (!(i < iterations)) return [3 /*break*/, 6];
+                            _loop_1 = function (dcLength) {
+                                var dc, result, index;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            dc = this_1.datacenters[dcLength];
+                                            return [4 /*yield*/, this_1.lce.getLatencyForId(dc.id)];
+                                        case 1:
+                                            result = _a.sent();
+                                            if (result && result.latency) {
+                                                index = this_1.datacenters.findIndex(function (e) { return e.id === dc.id; });
+                                                (_a = this_1.datacenters[index].latencies) === null || _a === void 0 ? void 0 : _a.push(result.latency);
+                                                this_1.datacenters[index].averageLatency = Util_1.Util.getAverageLatency(this_1.datacenters[index].latencies);
+                                            }
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            };
+                            this_1 = this;
+                            dcLength = 0;
+                            _b.label = 2;
+                        case 2:
+                            if (!(dcLength < this.datacenters.length)) return [3 /*break*/, 5];
+                            return [5 /*yield**/, _loop_1(dcLength)];
+                        case 3:
+                            _b.sent();
+                            _b.label = 4;
+                        case 4:
+                            dcLength++;
+                            return [3 /*break*/, 2];
+                        case 5:
+                            i++;
+                            return [3 /*break*/, 1];
+                        case 6: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        CCT.prototype.startBandwidthChecks = function (datacenter, iterations) {
+            var _this = this;
+            this.startMeasurementForBandwidth(datacenter, iterations).then(function () {
+                _this.finishedBandwidth = true;
+            });
+        };
+        CCT.prototype.startMeasurementForBandwidth = function (dc, iterations) {
+            var _a;
+            return __awaiter(this, void 0, void 0, function () {
+                var i, result, index;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
+                        case 0:
+                            i = 0;
+                            _b.label = 1;
+                        case 1:
+                            if (!(i < iterations)) return [3 /*break*/, 4];
+                            return [4 /*yield*/, this.lce.getBandwidthForId(dc.id)];
+                        case 2:
+                            result = _b.sent();
+                            if (result && result.bandwidth) {
+                                index = this.datacenters.findIndex(function (e) { return e.id === dc.id; });
+                                (_a = this.datacenters[index].bandwidths) === null || _a === void 0 ? void 0 : _a.push(result.bandwidth);
+                                this.datacenters[index].averageBandwidth = Util_1.Util.getAverageBandwidth(this.datacenters[index].bandwidths);
+                            }
+                            _b.label = 3;
+                        case 3:
+                            i++;
+                            return [3 /*break*/, 1];
+                        case 4: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        CCT.prototype.getCurrentDatacentersSorted = function () {
+            Util_1.Util.sortDatacenters(this.datacenters);
+            return this.datacenters;
+        };
+        CCT.prototype.clean = function () {
+            this.datacenters.forEach(function (dc) {
+                dc.position = 0;
+                dc.averageLatency = 0;
+                dc.averageBandwidth = {
+                    bitsPerSecond: 0,
+                    kiloBitsPerSecond: 0,
+                    megaBitsPerSecond: 0,
+                };
+                dc.latencies = [];
+                dc.bandwidths = [];
+            });
+        };
+        return CCT;
+    }());
+    exports.CCT = CCT;
+});
