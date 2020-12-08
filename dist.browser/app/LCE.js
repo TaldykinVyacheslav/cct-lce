@@ -34,20 +34,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "node-fetch", "abort-controller"], factory);
-    }
-})(function (require, exports) {
+define(["require", "exports", "node-fetch", "abort-controller"], function (require, exports, node_fetch_1, abort_controller_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LCE = void 0;
-    var node_fetch_1 = require("node-fetch");
-    var abort_controller_1 = require("abort-controller");
     var LCE = /** @class */ (function () {
         function LCE(_a) {
             var datacenters = _a.datacenters, agent = _a.agent;
@@ -198,13 +188,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             });
         };
         LCE.prototype.bandwidthFetch = function (url) {
-            var controller = new abort_controller_1.AbortController();
+            var controller = new abort_controller_1.default();
             var signal = controller.signal;
             this.cancelableBandwidthRequests.push(controller);
             return this.abortableFetch(url, signal);
         };
         LCE.prototype.latencyFetch = function (url) {
-            var controller = new abort_controller_1.AbortController();
+            var controller = new abort_controller_1.default();
             var signal = controller.signal;
             this.cancelableLatencyRequests.push(controller);
             return this.abortableFetch(url, signal);

@@ -34,19 +34,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "../app/CCT", "../app/Util"], factory);
-    }
-})(function (require, exports) {
+define(["require", "exports", "../app/CCT", "../app/Util"], function (require, exports, CCT_1, Util_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var CCT_1 = require("../app/CCT");
-    var Util_1 = require("../app/Util");
     var TestAll = /** @class */ (function () {
         function TestAll() {
         }

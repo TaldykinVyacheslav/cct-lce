@@ -34,21 +34,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "node-fetch", "./LCE", "./Util"], factory);
-    }
-})(function (require, exports) {
+define(["require", "exports", "node-fetch", "./LCE", "./Util"], function (require, exports, node_fetch_1, LCE_1, Util_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CCT = void 0;
-    var node_fetch_1 = require("node-fetch");
-    var LCE_1 = require("./LCE");
-    var Util_1 = require("./Util");
     var CCT = /** @class */ (function () {
         function CCT(_a) {
             var regions = _a.regions;

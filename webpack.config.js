@@ -10,7 +10,7 @@ module.exports = {
        path: path.resolve(__dirname, 'dist.browser')
    },
    resolve: {
-       extensions: [".ts", ".js"]
+       extensions: [".ts", ".umd.js", ".js"]
    },
    module: {
        rules: [{ test: /\.ts$/, loader: "ts-loader" }]

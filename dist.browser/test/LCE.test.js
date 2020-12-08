@@ -34,18 +34,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "../app/LCE"], factory);
-    }
-})(function (require, exports) {
+define(["require", "exports", "../app/LCE"], function (require, exports, LCE_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var LCE_1 = require("../app/LCE");
     var datacenters = [
         {
             id: "07fe49e2-795b-4f06-9908-436e6dc21042",

@@ -447,7 +447,7 @@
         "affectsGlobalScope": false
       },
       "../app/lce.ts": {
-        "version": "5db45656e61d1d2b5dd574a182b50503d91f72fefa278e2af660608dc9c9bc63",
+        "version": "e5fa716958c13c60a4b6172991ac975adf3b81a06e6bf2f871e040eeef515896",
         "signature": "86239c94dda1d7974c316b5691a3db3632a68848fdaa9ca168899fc8b475418d",
         "affectsGlobalScope": false
       },
